@@ -1,6 +1,6 @@
 const quoteDisplay = document.getElementById("quoteDisplay");
 const newQuoteBtn = document.getElementById("newQuote");
-const quoteForm = document.getElementById("quoteForm");
+const createAddQuoteForm = document.getElementById("createAddQuoteForm");
 const quoteTextInput = document.getElementById("quoteText");
 const quoteAuthorInput = document.getElementById("quoteAuthor");
 const quoteCategoryInput = document.getElementById("quoteCategory");
@@ -53,10 +53,10 @@ function filterQuotes() {
     return;
   }
 
-  const randomQuote = filteredQuotes[Math.floor(Math.random() * filteredQuotes.length)];
-  quoteDisplay.innerHTML = `"${randomQuote.text}" — <strong>${randomQuote.author}</strong> <em>(${randomQuote.category})</em>`;
+  const showRandomQuote = filteredQuotes[Math.floor(Math.random() * filteredQuotes.length)];
+  quoteDisplay.innerHTML = `"${showR.text}" — <strong>${showRandomQuote.author}</strong> <em>(${showR.category})</em>`;
 
-  sessionStorage.setItem("lastQuote", JSON.stringify(randomQuote));
+  sessionStorage.setItem("lastQuote", JSON.stringify(showRandomQuote));
 }
 
 function restoreLastQuote() {
@@ -68,7 +68,7 @@ function restoreLastQuote() {
 }
 
 // === ADD QUOTE ===
-quoteForm.addEventListener("submit", function (e) {
+createAddQuoteForm.addEventListener("submit", function (e) {
   e.preventDefault();
   const newQuote = {
     text: quoteTextInput.value.trim(),
@@ -81,7 +81,7 @@ quoteForm.addEventListener("submit", function (e) {
     saveQuotes();
     populateCategories();
     filterQuotes();
-    quoteForm.reset();
+    createAddQuoteForm.reset();
     notify("Quote added!");
   }
 });
@@ -118,6 +118,19 @@ async function fetchQuotesFromServer() {
     notify("Failed to sync from server.", "error");
   }
 }
+
+ function importFromJsonFile(event) {
+    const fileReader = new FileReader();
+    fileReader.onload = function(event) {
+      const importedQuotes = JSON.parse(event.target.result);
+      quotes.push(...importedQuotes);
+      saveQuotes();
+      alert('Quotes imported successfully!');
+    };
+    fileReader.readAsText(event.target.files[0]);
+  }
+
+
 
 // === PERIODIC SYNC ===
 setInterval(fetchQuotesFromServer, 15000); // every 15s
