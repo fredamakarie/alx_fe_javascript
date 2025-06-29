@@ -11,7 +11,7 @@ const notification = document.getElementById("notification");
 let quotes = JSON.parse(localStorage.getItem("quotes")) || [];
 
 // Simulated API endpoint
-const API_URL = 'https://jsonplaceholder.typicode.com/posts';
+const API_URL = 'https://jsonplaceholder.typicode.com/POSTs';
 
 // === UTILITIES ===
 function saveQuotes() {
@@ -89,9 +89,18 @@ createAddQuoteForm.addEventListener("submit", function (e) {
 // === FETCH FROM MOCK SERVER ===
 async function fetchQuotesFromServer() {
   try {
-    const res = await fetch(API_URL);
+    const res = await fetch("https://jsonplaceholder.typicode.com/posts", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+        // Add Authorization or other headers if needed
+        // "Authorization": "Bearer YOUR_TOKEN"
+      }
+    });
+
     const data = await res.json();
-    const serverQuotes = data.slice(0, 5).map(post => ({
+
+    const syncQuotes = data.slice(0, 5).map(post => ({
       text: post.title,
       author: "API User",
       category: "Server"
@@ -99,12 +108,12 @@ async function fetchQuotesFromServer() {
 
     let updated = false;
 
-    serverQuotes.forEach(serverQuote => {
+    syncQuotes.forEach(syncQuote => {
       const exists = quotes.some(
-        q => q.text === serverQuote.text && q.author === serverQuote.author
+        q => q.text === syncQuote.text && q.author === syncQuote.author
       );
       if (!exists) {
-        quotes.push(serverQuote);
+        quotes.push(syncQuote);
         updated = true;
       }
     });
@@ -116,9 +125,12 @@ async function fetchQuotesFromServer() {
     }
   } catch (err) {
     notify("Failed to sync from server.", "error");
+    console.error("Sync error:", err);
   }
 }
 
+
+//Import and Export Quotes
  function importFromJsonFile(event) {
     const fileReader = new FileReader();
     fileReader.onload = function(event) {
@@ -130,10 +142,27 @@ async function fetchQuotesFromServer() {
     fileReader.readAsText(event.target.files[0]);
   }
 
+const exportBtn = document.getElementById("exportBtn");
+
+exportBtn.addEventListener("click", () => {
+  const dataStr = JSON.stringify(quotes, null, 2); // pretty-print the JSON
+  const blob = new Blob([dataStr], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "quotes.json";
+  document.body.appendChild(link);
+  link.click();
+
+  // Cleanup
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+});
 
 
 // === PERIODIC SYNC ===
-setInterval(fetchQuotesFromServer, 15000); // every 15s
+setInterval(syncQuotes, 15000); // every 15s
 
 // === INIT ===
 newQuoteBtn.addEventListener("click", filterQuotes);
@@ -142,4 +171,4 @@ categoryFilter.addEventListener("change", filterQuotes);
 populateCategories();
 restoreLastQuote();
 filterQuotes();
-fetchQuotesFromServer(); // Initial fetch
+syncQuotes(); // Initial fetch
