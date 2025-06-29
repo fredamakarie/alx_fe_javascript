@@ -131,6 +131,23 @@ async function fetchQuotesFromServer() {
     fileReader.readAsText(event.target.files[0]);
   }
 
+const exportBtn = document.getElementById("exportBtn");
+
+exportBtn.addEventListener("click", () => {
+  const dataStr = JSON.stringify(quotes, null, 2); // pretty-print the JSON
+  const blob = new Blob([dataStr], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "quotes.json";
+  document.body.appendChild(link);
+  link.click();
+
+  // Cleanup
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+});
 
 
 // === PERIODIC SYNC ===
