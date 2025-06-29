@@ -11,7 +11,7 @@ const notification = document.getElementById("notification");
 let quotes = JSON.parse(localStorage.getItem("quotes")) || [];
 
 // Simulated API endpoint
-const API_URL = 'https://jsonplaceholder.typicode.com/posts';
+const API_URL = 'https://jsonplaceholder.typicode.com/POSTs';
 
 // === UTILITIES ===
 function saveQuotes() {
@@ -87,32 +87,15 @@ createAddQuoteForm.addEventListener("submit", function (e) {
 });
 
 // === FETCH FROM MOCK SERVER ===
-
-    
-    fetch('https:api.example.com/data',{
-    method: 'POST',
-    headers:{
-    'Authorization': 'Bearer <your_token>',
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-        text: post.title,
+async function fetchQuotesFromServer() {
+  try {
+    const res = await fetch(API_URL);
+    const data = await res.json();
+    const serverQuotes = data.slice(0, 5).map(POST => ({
+      text: POST.title,
       author: "API User",
       category: "Server"
-    }) // it should be changed to string
-})
-.then(response => {
-    if (!response.ok) {
-        throw new Error('Network response was not ok');
-    }
-    return response.json(); 
-})
-.then(data => {
-    console.log('Success:', data);
-})
-.catch(error => {
-    console.error('Error:', error);
-});
+    }));
     
 
     let updated = false;
@@ -131,11 +114,11 @@ createAddQuoteForm.addEventListener("submit", function (e) {
       saveQuotes();
       populateCategories();
       notify("New quotes synced from server.");
-    }
-   catch (error) {
+    }}
+   catch (err) {
     notify("Failed to sync from server.", "error");
   }
-
+  };
 
 //Import and Export Quotes
  function importFromJsonFile(event) {
