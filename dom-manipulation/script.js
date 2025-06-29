@@ -89,23 +89,31 @@ createAddQuoteForm.addEventListener("submit", function (e) {
 // === FETCH FROM MOCK SERVER ===
 async function fetchQuotesFromServer() {
   try {
-    const res = await fetch["https://jsonplaceholder.typicode.com/posts"];
+    const res = await fetch("https://jsonplaceholder.typicode.com/posts", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+        // Add Authorization or other headers if needed
+        // "Authorization": "Bearer YOUR_TOKEN"
+      }
+    });
+
     const data = await res.json();
-    const serverQuotes = data.slice(0, 5).map(POST => ({
-      text: POST.title,
+
+    const syncQuotes = data.slice(0, 5).map(post => ({
+      text: post.title,
       author: "API User",
       category: "Server"
     }));
-    
 
     let updated = false;
 
-    serverQuotes.forEach(serverQuote => {
+    syncQuotes.forEach(syncQuote => {
       const exists = quotes.some(
-        q => q.text === serverQuote.text && q.author === serverQuote.author
+        q => q.text === syncQuote.text && q.author === syncQuote.author
       );
       if (!exists) {
-        quotes.push(serverQuote);
+        quotes.push(syncQuote);
         updated = true;
       }
     });
@@ -114,11 +122,13 @@ async function fetchQuotesFromServer() {
       saveQuotes();
       populateCategories();
       notify("New quotes synced from server.");
-    }}
-   catch (err) {
+    }
+  } catch (err) {
     notify("Failed to sync from server.", "error");
+    console.error("Sync error:", err);
   }
-  };
+}
+
 
 //Import and Export Quotes
  function importFromJsonFile(event) {
