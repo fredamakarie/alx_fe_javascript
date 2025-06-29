@@ -89,7 +89,7 @@ createAddQuoteForm.addEventListener("submit", function (e) {
 // === FETCH FROM MOCK SERVER ===
 async function fetchQuotesFromServer() {
   try {
-    const res = await fetch(API_URL);
+    const res = await fetch["https://jsonplaceholder.typicode.com/posts"];
     const data = await res.json();
     const serverQuotes = data.slice(0, 5).map(POST => ({
       text: POST.title,
