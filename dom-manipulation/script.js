@@ -121,7 +121,7 @@ async function fetchQuotesFromServer() {
     if (updated) {
       saveQuotes();
       populateCategories();
-      notify("New quotes synced from server.");
+      notify("Quotes synced with server!");
     }
   } catch (err) {
     notify("Failed to sync from server.", "error");
