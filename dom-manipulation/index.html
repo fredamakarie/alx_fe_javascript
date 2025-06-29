@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Quote Generator</title>
+  </head>
+  <body>
+    <h1>Dynamic Quote Generator</h1>
+    <div>
+        <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
+        <input id="author" type="text" placeholder="Enter the author" />
+        <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
+        <button id = "addQuote" onclick="addQuote()">Add Quote</button>
+    </div>
+    <button id="newQuote">Show New Quote</button>
+     <select id="categoryFilter" onchange="filterQuotes()">
+    <option value="all">All Categories</option>
+    <!-- Dynamically populated categories -->
+  </select>
+    <div id="quoteDisplay">
+
+    </div>
+    <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
+    <script src="another.js"></script>
+  </body>
+  </html>
