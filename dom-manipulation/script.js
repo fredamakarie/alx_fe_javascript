@@ -1,6 +1,6 @@
 const quoteDisplay = document.getElementById("quoteDisplay");
 const newQuoteBtn = document.getElementById("newQuote");
-const createAddQuoteForm = document.getElementById("createAddQuoteForm");
+const createAddQuoteForm = document.getElementById("addQuoteForm");
 const quoteTextInput = document.getElementById("quoteText");
 const quoteAuthorInput = document.getElementById("quoteAuthor");
 const quoteCategoryInput = document.getElementById("quoteCategory");
@@ -54,7 +54,7 @@ function filterQuotes() {
   }
 
   const showRandomQuote = filteredQuotes[Math.floor(Math.random() * filteredQuotes.length)];
-  quoteDisplay.innerHTML = `"${showR.text}" — <strong>${showRandomQuote.author}</strong> <em>(${showR.category})</em>`;
+  quoteDisplay.innerHTML = `"${showRandomQuote.text}" — <strong>${showRandomQuote.author}</strong> <em>(${showRandomQuote.category})</em>`;
 
   sessionStorage.setItem("lastQuote", JSON.stringify(showRandomQuote));
 }
@@ -162,7 +162,7 @@ exportBtn.addEventListener("click", () => {
 
 
 // === PERIODIC SYNC ===
-setInterval(syncQuotes, 15000); // every 15s
+setInterval(fetchQuotesFromServer, 15000); // every 15s
 
 // === INIT ===
 newQuoteBtn.addEventListener("click", filterQuotes);
@@ -171,4 +171,4 @@ categoryFilter.addEventListener("change", filterQuotes);
 populateCategories();
 restoreLastQuote();
 filterQuotes();
-syncQuotes(); // Initial fetch
+fetchQuotesFromServer(); // Initial fetch

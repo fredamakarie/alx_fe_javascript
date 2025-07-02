@@ -3,18 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dynamic Quote Generator with Sync</title>
+  <title>Dynamic Quote Generator</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family:Verdana, Geneva, Tahoma, sans-serif;
       padding: 20px;
+      justify-items: center;
     }
+    .mainbg{
+      background-color: rgb(139, 206, 189);
+      width: 24rem;
+      padding: 3rem;
+      border-radius: 2rem;
+    }
+
     #quoteDisplay {
       margin: 20px 0;
       font-size: 1.5em;
       padding: 10px;
       background-color: #f0f0f0;
       border-left: 5px solid #007BFF;
+      max-width: 400px;
     }
     form {
       margin-top: 30px;
@@ -36,7 +45,8 @@
   </style>
 </head>
 <body>
-  <h1>Dynamic Quote Generator with Sync</h1>
+  <section class="mainbg">
+  <h1>Dynamic Quote Generator</h1>
 
   <div id="notification"></div>
 
@@ -53,12 +63,12 @@
     <input type="text" id="quoteText" placeholder="Enter quote" required>
     <input type="text" id="quoteAuthor" placeholder="Enter author" required>
     <input type="text" id="quoteCategory" placeholder="Enter category" required>
-    <button type="submit">Add Quote</button>
+    <button type="submit" id="addQuoteForm">Add Quote</button>
   </form>
 
   <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
   <button id="exportBtn">Export Quotes</button>
-
+  </section>
 
   <script src="script.js"></script>
 </body>
